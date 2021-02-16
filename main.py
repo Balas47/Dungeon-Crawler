@@ -1,20 +1,10 @@
 import sys, pygame
 import player
+import maze
 
-#Color values for the rainbow in ROYGBIV, black, and white order
-COLORS = [(255, 0, 0), (255, 127, 0), (255, 255, 0), (0, 255, 0),
-          (0, 0, 255), (46, 43, 95), (139, 0, 255), (0, 0, 0), (255, 255, 255)]
-
-# Constants for accessing the color values
-RED = 0
-ORANGE = 1
-YELLOW = 2
-GREEN = 3
-BLUE = 4
-INDIGO = 5
-VIOLET = 6
-BLACK = 7
-WHITE = 8
+# Import constants for color stuffs
+from player import(COLORS, RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO,
+                 VIOLET, BLACK, WHITE)
 
 
 if __name__ == "__main__":
@@ -27,6 +17,9 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode([width, height])
 
     the_player = player.Player(screen)
+
+    the_maze = maze.Maze(screen)
+    obstacles = the_maze.generate(10, 10)
 
     # Setting up the main loop
     run_game = True
@@ -49,6 +42,7 @@ if __name__ == "__main__":
         # Print everything on the screen
         screen.fill(COLORS[ORANGE])
         the_player.draw(width, height)
+        the_maze.draw()
         pygame.display.flip()
 
     pygame.quit()
