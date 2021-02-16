@@ -12,14 +12,15 @@ if __name__ == "__main__":
     pygame.init()
 
     # Setting up the game window
-    width = 500
-    height = 500
+    width = 800
+    height = 800
     screen = pygame.display.set_mode([width, height])
 
     the_player = player.Player(screen)
 
+    # Set up the maze, and get the list of rects representing the walls
     the_maze = maze.Maze(screen)
-    obstacles = the_maze.generate(10, 10)
+    obstacles = the_maze.generate(20, 20)
 
     # Setting up the main loop
     run_game = True

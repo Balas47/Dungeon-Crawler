@@ -62,9 +62,9 @@ class Player(pygame.sprite.Sprite):
         if buttons[pygame.K_w]:
             self.y -= self.y_speed
 
-            # Undo the movement if necessary
-            if hit > HITF and self.y < obstacles[hit].bottom and self.y > obstacles[hit].top:
-                if obstacles[hit].left < self.x + 1 < obstacles[hit].right:
+            # Undo the movement if necessary (if the player would be within the wall)
+            if obstacles[hit].top <= self.y <= obstacles[hit].bottom:
+                if obstacles[hit].left < self.x + 1 <= obstacles[hit].right:
                     self.y += self.y_speed
 
             self.facing = UP
@@ -72,8 +72,8 @@ class Player(pygame.sprite.Sprite):
         elif buttons[pygame.K_a]:
             self.x -= self.x_speed
 
-            if hit > HITF and self.x < obstacles[hit].right and self.x > obstacles[hit].left:
-                if obstacles[hit].top < self.y + 1 < obstacles[hit].bottom:
+            if obstacles[hit].left <= self.x <= obstacles[hit].right:
+                if obstacles[hit].top < self.y + 1 <= obstacles[hit].bottom:
                     self.x += self.x_speed
 
             self.facing = LEFT
@@ -81,8 +81,8 @@ class Player(pygame.sprite.Sprite):
         elif buttons[pygame.K_s]:
             self.y += self.y_speed
 
-            if hit > HITF and self.y + self.height > obstacles[hit].top and self.y < obstacles[hit].bottom:
-                if obstacles[hit].left < self.x + 1 < obstacles[hit].right:
+            if obstacles[hit].top <= self.y + self.height <= obstacles[hit].bottom:
+                if obstacles[hit].left <= self.x + 1 <= obstacles[hit].right:
                     self.y -= self.y_speed
 
             self.facing = DOWN
@@ -90,8 +90,8 @@ class Player(pygame.sprite.Sprite):
         elif buttons[pygame.K_d]:
             self.x += self.x_speed
 
-            if hit > HITF and self.x + self.width > obstacles[hit].left and self.x < obstacles[hit].right:
-                if obstacles[hit].top < self.y + 1 < obstacles[hit].bottom:
+            if obstacles[hit].left <= self.x + self.width <= obstacles[hit].right:
+                if obstacles[hit].top <= self.y + 1 <= obstacles[hit].bottom:
                     self.x -= self.x_speed
 
             self.facing = RIGHT

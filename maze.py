@@ -11,7 +11,7 @@ CLOSED = "&"
 
 # Params for the maze
 TURNS = 5
-LENGTH = .75
+LENGTH = .45
 
 # Directions the generator can move
 DIRECTIONS = [[0, -1], [0, 1], [-1, 0], [1, 0]]
