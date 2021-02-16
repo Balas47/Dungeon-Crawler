@@ -21,6 +21,8 @@ DOWN = COLORS[GREEN]
 LEFT = COLORS[BLUE]
 RIGHT = COLORS[RED]
 
+HITF = -1
+
 # The player class controls the position of the player on the screen, as
 # well as how the different inputs effect what happens for the player.
 class Player(pygame.sprite.Sprite):
@@ -47,28 +49,51 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.player_surf.get_rect()
 
 
-    def move(self, buttons):
+    def move(self, buttons, obstacles):
         """
         This function will take care of the movement of the player
         :param buttons: The buttons the user pressed to determine direction
                        of the player movement
         """
 
+        hit = self.rect.collidelist(obstacles)
+
         # Take care of the actual movement of the player
         if buttons[pygame.K_w]:
             self.y -= self.y_speed
+
+            # Undo the movement if necessary
+            if hit > HITF and self.y < obstacles[hit].bottom and self.y > obstacles[hit].top:
+                if obstacles[hit].left < self.x + 1 < obstacles[hit].right:
+                    self.y += self.y_speed
+
             self.facing = UP
 
-        if buttons[pygame.K_a]:
+        elif buttons[pygame.K_a]:
             self.x -= self.x_speed
+
+            if hit > HITF and self.x < obstacles[hit].right and self.x > obstacles[hit].left:
+                if obstacles[hit].top < self.y + 1 < obstacles[hit].bottom:
+                    self.x += self.x_speed
+
             self.facing = LEFT
 
-        if buttons[pygame.K_s]:
+        elif buttons[pygame.K_s]:
             self.y += self.y_speed
+
+            if hit > HITF and self.y + self.height > obstacles[hit].top and self.y < obstacles[hit].bottom:
+                if obstacles[hit].left < self.x + 1 < obstacles[hit].right:
+                    self.y -= self.y_speed
+
             self.facing = DOWN
 
-        if buttons[pygame.K_d]:
+        elif buttons[pygame.K_d]:
             self.x += self.x_speed
+
+            if hit > HITF and self.x + self.width > obstacles[hit].left and self.x < obstacles[hit].right:
+                if obstacles[hit].top < self.y + 1 < obstacles[hit].bottom:
+                    self.x -= self.x_speed
+
             self.facing = RIGHT
 
         # Make sure that the player cannot go off of the screen

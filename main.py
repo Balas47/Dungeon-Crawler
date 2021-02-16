@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
         # Take care of user inputs
         keys = pygame.key.get_pressed()
-        the_player.move(keys)
+        the_player.move(keys, obstacles)
 
         # Print everything on the screen
         screen.fill(COLORS[ORANGE])
