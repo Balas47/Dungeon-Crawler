@@ -56,42 +56,55 @@ class Player(pygame.sprite.Sprite):
                        of the player movement
         """
 
+        # Get the index of a colliding rect
         hit = self.rect.collidelist(obstacles)
+
+        # Check the players collisions in the x and y directions considering precedence of rects in to the left, and to the top of the at hit
+        checkx = obstacles[hit].left < self.x + 1 < obstacles[hit].right or obstacles[hit].left < self.x + self.width - 1 < obstacles[hit].right
+        checkl = obstacles[hit + 1].left < self.x + 1 < obstacles[hit + 1].right or obstacles[hit + 1].left < self.x + self.width - 1 < obstacles[hit + 1].right
+        checky = obstacles[hit].top < self.y + 1 < obstacles[hit].bottom or obstacles[hit].top < self.y + self.height - 1 < obstacles[hit].bottom
+        checkb = False
+
+        # Find the rect directly below the one being collided with
+        for i in range(hit + 1, len(obstacles)):
+            if obstacles[i].left == obstacles[hit].left:
+                checkb = obstacles[i].top < self.y + 1 < obstacles[i].bottom or obstacles[i].top < self.y + self.height - 1 < obstacles[i].bottom
+                break
 
         # Take care of the actual movement of the player
         if buttons[pygame.K_w]:
             self.y -= self.y_speed
 
             # Undo the movement if necessary (if the player would be within the wall)
-            if obstacles[hit].top <= self.y <= obstacles[hit].bottom:
-                if obstacles[hit].left < self.x + 1 <= obstacles[hit].right:
+            if hit > HITF and obstacles[hit].top <= self.y <= obstacles[hit].bottom:
+                if checkx or checkl:
                     self.y += self.y_speed
 
             self.facing = UP
 
-        elif buttons[pygame.K_a]:
+        if buttons[pygame.K_a]:
             self.x -= self.x_speed
 
-            if obstacles[hit].left <= self.x <= obstacles[hit].right:
-                if obstacles[hit].top < self.y + 1 <= obstacles[hit].bottom:
+            if hit > HITF and obstacles[hit].left <= self.x <= obstacles[hit].right:
+                if checky or checkb:
                     self.x += self.x_speed
 
             self.facing = LEFT
 
-        elif buttons[pygame.K_s]:
+        if buttons[pygame.K_s]:
             self.y += self.y_speed
 
-            if obstacles[hit].top <= self.y + self.height <= obstacles[hit].bottom:
-                if obstacles[hit].left <= self.x + 1 <= obstacles[hit].right:
+            if hit > HITF and obstacles[hit].top <= self.y + self.height <= obstacles[hit].bottom:
+                if checkx or checkl:
                     self.y -= self.y_speed
 
             self.facing = DOWN
 
-        elif buttons[pygame.K_d]:
+        if buttons[pygame.K_d]:
             self.x += self.x_speed
 
-            if obstacles[hit].left <= self.x + self.width <= obstacles[hit].right:
-                if obstacles[hit].top <= self.y + 1 <= obstacles[hit].bottom:
+            if hit > HITF and obstacles[hit].left <= self.x + self.width <= obstacles[hit].right:
+                if checky or checkb:
                     self.x -= self.x_speed
 
             self.facing = RIGHT
