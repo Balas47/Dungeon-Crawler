@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
 
         # Check the players collisions in the x and y directions considering precedence of rects in to the left, and to the top of the at hit
         checkx = obstacles[hit].left < self.x + 1 < obstacles[hit].right or obstacles[hit].left < self.x + self.width - 1 < obstacles[hit].right
-        checkl = obstacles[hit + 1].left < self.x + 1 < obstacles[hit + 1].right or obstacles[hit + 1].left < self.x + self.width - 1 < obstacles[hit + 1].right
+        checkl = obstacles[(hit + 1) % len(obstacles)].left < self.x + 1 < obstacles[(hit + 1) % len(obstacles)].right or obstacles[(hit + 1) % len(obstacles)].left < self.x + self.width - 1 < obstacles[(hit + 1) % len(obstacles)].right
         checky = obstacles[hit].top < self.y + 1 < obstacles[hit].bottom or obstacles[hit].top < self.y + self.height - 1 < obstacles[hit].bottom
         checkb = False
 
@@ -121,6 +121,17 @@ class Player(pygame.sprite.Sprite):
             self.y -= self.y_speed
 
         # Update the player rectangle
+        self.rect.left = self.x
+        self.rect.top = self.y
+
+
+    def reset(self):
+        """
+        This function will reset the location of the player
+        :return: None
+        """
+        self.x = 0
+        self.y = 0
         self.rect.left = self.x
         self.rect.top = self.y
 

@@ -28,6 +28,8 @@ class Maze:
         self.screen = screen
         self.wallRects = []
         self.wallSurfs = []
+        self.exitRect = None
+        self.exitSurf = None
 
 
     def generate(self, xdim, ydim):
@@ -35,8 +37,13 @@ class Maze:
         This function will generate a maze using the random walk algorithm.
         :param xdim: Number of cells in the x direction.
         :param ydim: Number of cells in the y direction.
-        :return: A list of rectangles representing the cells in the maze.
+        :return: A list of rectangles representing the cells in the maze. And a rect
+                 representing the exit cell for the maze.
         """
+
+        # Clear the information being stored if necessary
+        self.wallRects.clear()
+        self.wallSurfs.clear()
 
         # Create a list for the maze generation
         maze = [[CLOSED for i in range(xdim)] for i in range(ydim)]
@@ -99,7 +106,30 @@ class Maze:
                     self.wallRects.append(cellRect)
                     rectangles.append(cellRect)
 
-        return rectangles
+        exit = pygame.Surface((int(cellWidth), int(cellHeight)))
+        exit.fill(COLORS[GREEN])
+        exitRect = exit.get_rect()
+        found = False
+
+        # Find a cell to choose to be the end. Preference for the cell at the bottom right
+        for row in range(len(maze) - 1, 0, -1):
+            for cell in range(len(maze[row]) - 1, 0, -1):
+
+                # Find the first cell thats open, and set it as the exit cell
+                if maze[row][cell] == OPEN:
+                    exitRect.left = cellWidth * cell
+                    exitRect.top = cellHeight * row
+                    found = True
+                    break
+
+            # Stop searching once an exit is found
+            if found:
+                break
+
+        self.exitSurf = exit
+        self.exitRect = exitRect
+
+        return rectangles, exitRect
 
 
     def draw(self):
@@ -107,6 +137,9 @@ class Maze:
         This function will draw the rectangles of the maze on the screen.
         :return: None
         """
+
+        # Print out the exit cell
+        self.screen.blit(self.exitSurf, self.exitRect)
 
         # Go through the cells
         for i in range(len(self.wallRects)):

@@ -20,11 +20,18 @@ if __name__ == "__main__":
 
     # Set up the maze, and get the list of rects representing the walls
     the_maze = maze.Maze(screen)
-    obstacles = the_maze.generate(20, 20)
+    obstacles, exit = the_maze.generate(20, 20)
+    left = False
 
     # Setting up the main loop
     run_game = True
     while run_game:
+
+        # Resets the maze and player location if the player reaches the exit
+        if left:
+            obstacles, exit = the_maze.generate(20, 20)
+            the_player.reset()
+            left = False
 
         for event in pygame.event.get():
 
@@ -39,6 +46,10 @@ if __name__ == "__main__":
         # Take care of user inputs
         keys = pygame.key.get_pressed()
         the_player.move(keys, obstacles)
+
+        # Check if the player has moved into the exit cell
+        if exit.contains(the_player.rect):
+            left = True
 
         # Print everything on the screen
         screen.fill(COLORS[ORANGE])
