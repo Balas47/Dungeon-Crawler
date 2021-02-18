@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
                 break
 
         # Take care of the actual movement of the player
-        if buttons[pygame.K_w]:
+        if buttons[pygame.K_w] or buttons[pygame.K_UP]:
             self.y -= self.y_speed
 
             # Undo the movement if necessary (if the player would be within the wall)
@@ -82,7 +82,7 @@ class Player(pygame.sprite.Sprite):
 
             self.facing = UP
 
-        if buttons[pygame.K_a]:
+        if buttons[pygame.K_a] or buttons[pygame.K_LEFT]:
             self.x -= self.x_speed
 
             if hit > HITF and obstacles[hit].left <= self.x <= obstacles[hit].right:
@@ -91,7 +91,7 @@ class Player(pygame.sprite.Sprite):
 
             self.facing = LEFT
 
-        if buttons[pygame.K_s]:
+        if buttons[pygame.K_s] or buttons[pygame.K_DOWN]:
             self.y += self.y_speed
 
             if hit > HITF and obstacles[hit].top <= self.y + self.height <= obstacles[hit].bottom:
@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
 
             self.facing = DOWN
 
-        if buttons[pygame.K_d]:
+        if buttons[pygame.K_d] or buttons[pygame.K_RIGHT]:
             self.x += self.x_speed
 
             if hit > HITF and obstacles[hit].left <= self.x + self.width <= obstacles[hit].right:

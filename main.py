@@ -23,7 +23,7 @@ if __name__ == "__main__":
     obstacles, exit = the_maze.generate(20, 20)
     left = False
 
-    # Setting up the main loop
+    # Set up the main loop
     run_game = True
     while run_game:
 
