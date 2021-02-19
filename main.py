@@ -1,6 +1,7 @@
 import sys, pygame
 import player
 import maze
+import score
 
 # Import constants for color stuffs
 from player import(COLORS, RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO,
@@ -23,6 +24,9 @@ if __name__ == "__main__":
     obstacles, exit = the_maze.generate(20, 20)
     left = False
 
+    # Set up the text that will be going on screen
+    scoring = score.Score(screen)
+
     # Set up the main loop
     run_game = True
     while run_game:
@@ -32,6 +36,7 @@ if __name__ == "__main__":
             obstacles, exit = the_maze.generate(20, 20)
             the_player.reset()
             left = False
+            scoring.update()
 
         for event in pygame.event.get():
 
@@ -55,6 +60,8 @@ if __name__ == "__main__":
         screen.fill(COLORS[ORANGE])
         the_player.draw(width, height)
         the_maze.draw()
+        scoring.draw()
+
         pygame.display.flip()
 
     pygame.quit()
